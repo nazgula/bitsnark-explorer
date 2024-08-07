@@ -1,11 +1,12 @@
 import express from 'express';
+import cors from 'cors'; // Import CORS
 import AppDataSource from './config/database';
-import routes from './routes/index'; // Assuming you'll create this later for routing
+import routes from './routes/index';
 
 const app = express();
+app.use(cors()); // Use CORS middleware
 app.use(express.json());
 
-// Initialize the database connection
 AppDataSource.initialize()
     .then(() => {
         console.log('Database connected');
@@ -17,5 +18,4 @@ AppDataSource.initialize()
         console.error('Database connection error:', error);
     });
 
-// Set up routes
 app.use('/api', routes);

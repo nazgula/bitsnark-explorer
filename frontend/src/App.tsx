@@ -2,10 +2,27 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import React from 'react'
 
 
 function App() {
   const [count, setCount] = useState(0)
+  const [message, setMessage] = useState<string>('');
+
+  const handleClick = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/test');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json(); // Parse the JSON response
+      setMessage(data.message);
+    } catch (error) {
+      console.log(error)
+      console.error('Error fetching data:', error);
+      setMessage('Error fetching data');
+    }
+  };
 
   return (
     <>
@@ -19,8 +36,12 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
+        {message}
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
+        </button>
+        <button onClick={handleClick}>
+          getMessage
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
