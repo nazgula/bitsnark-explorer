@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import React from 'react'
 import axiosInstance from './axiosInstance';
+import { Button } from '@mui/material'
 
 
 function App() {
@@ -41,15 +42,13 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        {message}
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <button onClick={handleClick}>
-          getMessage
-        </button>
+
+        <Button color="primary" onClick={() => setCount((count) => count + 1)}>count is {count}</Button>
+        <Button color="secondary" onClick={handleClick}>Secondary Button</Button>
+
+
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          {message}
         </p>
       </div>
       <p className="read-the-docs">
