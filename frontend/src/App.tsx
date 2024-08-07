@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import React from 'react'
+import axiosInstance from './axiosInstance';
 
 
 function App() {
@@ -11,12 +12,14 @@ function App() {
 
   const handleClick = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/test');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      const response = await axiosInstance.get('/test');
+
+      // Check if response data is available and handle it
+      if (response && response.data) {
+        setMessage(response.data.message); // Update the state with the response data
+      } else {
+        setMessage('No data received');
       }
-      const data = await response.json(); // Parse the JSON response
-      setMessage(data.message);
     } catch (error) {
       console.log(error)
       console.error('Error fetching data:', error);
