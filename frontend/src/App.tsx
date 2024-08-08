@@ -1,10 +1,8 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import React from 'react'
 import axiosInstance from './axiosInstance';
-import { Button } from '@mui/material'
+import InteractionList from './pages/interactions-list/InetractionsList'
 
 
 function App() {
@@ -32,28 +30,7 @@ function App() {
 
   return (
     <>
-      <div className='flex'>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-
-        <Button color="primary" onClick={() => setCount((count) => count + 1)}>count is {count}</Button>
-        <Button color="secondary" onClick={handleClick}>Secondary Button</Button>
-
-
-        <p>
-          {message}
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <InteractionList />
     </>
   )
 }
