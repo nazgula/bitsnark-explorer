@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../axiosInstance';
 
-export interface Protocol {
+export interface ProtocolStep {
     id: string,
     pTxId: string,
     vTxId: string,
     step: string,
-    timout: string
+    timeout: string
 }
+
 export interface Interaction {
     id: string,
     tern: string,
-    protocol: Protocol[]
+    protocol: ProtocolStep[]
 }
 
 const useFetchInteraction = <T>(id: string) => {

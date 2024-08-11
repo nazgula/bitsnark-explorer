@@ -1,5 +1,6 @@
 import { Container, Typography } from '@mui/material';
 import React from 'react'
+import Icon from './Icon';
 
 export interface HeaderProps {
     title: string;
@@ -12,15 +13,15 @@ function Header(props: HeaderProps) {
     const { title, subTitle = '', backLink, children = null } = props;
 
     return (
-        <Container fixed className="bg-red">
-            <Typography variant="h3" component="h1" gutterBottom>
+        <div className="sticky flex flex-col justify-center w-full h-24 bg-white shadow-sm min-h-24 top-16">
+            <h1 className="w-full text-2xl">
                 {title}
-            </Typography>
-            <Typography variant="h6" component="h2" gutterBottom>
+            </h1>
+            <div className="w-full">
                 {subTitle}
-            </Typography>
+            </div>
             {children}
-        </Container>
+        </div>
     )
 }
 

@@ -20,7 +20,6 @@ const useFetchInteractions = <T>() => {
                 const response = await axiosInstance.get(`/getIneractions`);
                 if (response && response.data) {
                     console.log('response', response);
-
                     setData(response.data);
                 }
             } catch (err) {

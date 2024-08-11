@@ -11,7 +11,7 @@ function InteractionList() {
     if (error) return <div>Error fetching data</div>;
 
     const pageProps = {
-        title: 'Interaction List',
+        title: 'Bitsnark Explorer',
         subTitle: 'Just the place for a Snark!'
     };
 

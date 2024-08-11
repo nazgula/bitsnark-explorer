@@ -3,6 +3,7 @@ import Page from '../../components/Page';
 import { useParams } from 'react-router-dom';
 import useFetchInteraction from './useFetchIneraction';
 import { Card, Container, Grid, Typography } from '@mui/material';
+import Step from './Step';
 
 function Interaction() {
     const { id } = useParams<{ id: string }>();
@@ -31,39 +32,12 @@ function Interaction() {
 
             protocol.map((line, i) => {
                 return (
-                    <Grid container direction="row" key={i} spacing={3} columns={5}>
-                        <Grid item xs={1}>
-                            <Typography variant="h5" component="span" gutterBottom>
-                                Step {line.step} / {data.totalsteps}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Card>{line.pTxId}</Card>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Card>{line.vTxId}</Card>
-                        </Grid>
-                    </Grid>
+                    <Step key={i} line={line} totalsteps={data.totalSteps} />
                 )
             })
         )
 
-        // {<>
-        //     !loading && protocol.map((line, i) => {
-        //         return (
-        //             console.log(line);
-        //             {/* <Grid container direction="row" > */}
-        //             <p>{i}*</p>
-        //             {/* <Typography variant="h5" component="span" gutterBottom> */}
-        //             {line.step}
-        //             {/* </Typography> */}
-        //             {/* <Card>{line.pTxId}</Card>
-        //             <Card>{line.vTxId}</Card> */}
-        //             {/* </Grid> */}
 
-        //        )
-        //     })
-        //  </>}
 
 
 
@@ -75,12 +49,14 @@ function Interaction() {
 
     return (
         <Page headerProps={headerProps}>
-            {/* <Grid container spacing={3} direction='column'> */}
-            {/* {renderStep0()} */}
-            {renderMidSteps()}
-            {/* {renderEquivocationZone()}
+            <div className="flex flex-col justify-center overflow-y-scroll">
+                {/* <Grid container spacing={3} direction='column'> */}
+                {/* {renderStep0()} */}
+                {renderMidSteps()}
+                {/* {renderEquivocationZone()}
                 {renderFinalStep()} */}
-            {/* </Grid> */}
+                {/* </Grid> */}
+            </div>
         </Page>
     );
 }
