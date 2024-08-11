@@ -1,25 +1,29 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../axiosInstance';
 
-export interface InteractionListItem {
-    initTx: string,
-    step: number,
-    total: number,
+export interface Protocol {
+    id: string,
+    pTxId: string,
+    vTxId: string,
+    step: string,
+    timout: string
+}
+export interface Interaction {
+    id: string,
     tern: string,
-    timeout: string,
+    protocol: Protocol[]
 }
 
-const useFetchInteractions = <T>() => {
-    const [data, setData] = useState<InteractionListItem[]>([]);
+const useFetchInteraction = <T>(id: string) => {
+    const [data, setData] = useState<Interaction>({ id: '', tern: '', protocol: [] });
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/getIneractions`);
+                const response = await axiosInstance.get(`/getIneraction/${id}`);
                 if (response && response.data) {
-                    console.log('response', response);
 
                     setData(response.data);
                 }
@@ -36,4 +40,4 @@ const useFetchInteractions = <T>() => {
     return { data, loading, error };
 };
 
-export default useFetchInteractions;
+export default useFetchInteraction;

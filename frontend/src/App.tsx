@@ -3,6 +3,7 @@ import './App.css'
 import React from 'react'
 import axiosInstance from './axiosInstance';
 import InteractionList from './pages/interactions-list/InetractionsList'
+import AppRouter from './AppRouter'
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
 
   return (
     <>
-      <InteractionList />
+      <AppRouter />
     </>
   )
 }

@@ -1,10 +1,11 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React from 'react'
-import useFetchInteraction from './useFetchInteraction';
+import useFetchInteractions from './useFetchInteraction';
 import Page from '../../components/Page';
+import { Link } from 'react-router-dom';
 
 function InteractionList() {
-    const { data, loading, error } = useFetchInteraction();
+    const { data, loading, error } = useFetchInteractions();
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error fetching data</div>;
@@ -29,7 +30,11 @@ function InteractionList() {
                     {data.map((row: any) => {
                         return (
                             <TableRow key={row.initTx}>
-                                <TableCell>{row.initTx}</TableCell>
+                                <TableCell>
+                                    <Link to={`/interaction/${row.initTx}`}>
+                                        {row.initTx}
+                                    </Link>
+                                </TableCell>
                                 <TableCell>{row.step} / {row.total}</TableCell>
                                 <TableCell>{row.tern}</TableCell>
                                 <TableCell>{row.timeout}</TableCell>
