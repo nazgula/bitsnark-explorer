@@ -70,8 +70,8 @@ function Interaction() {
                                         </Link>
                                     }
                                     {!line.vTxId &&
-                                        <span className="text-red-500">
-                                            Time out: ${line.timeout}
+                                        <span className="font-bold">
+                                            Timeout at: {line.timeout}
                                         </span>
                                     }
 

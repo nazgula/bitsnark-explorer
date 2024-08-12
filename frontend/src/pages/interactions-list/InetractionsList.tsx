@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React from 'react'
 import useFetchInteractions from './useFetchInteraction';
 import Page from '../../components/Page';
@@ -17,6 +17,13 @@ function InteractionList() {
 
     return (
         <Page headerProps={pageProps}>
+            <div className="flex gap-4 p-8">
+                <Chip label="All" />
+                <Chip label="New" variant="outlined" />
+                <Chip label="Proved" variant="outlined" />
+                <Chip label="Timeout" variant="outlined" />
+                <Chip label="Disproved" variant="outlined" />
+            </div>
             <Table stickyHeader={true}>
                 <TableHead>
                     <TableRow>
