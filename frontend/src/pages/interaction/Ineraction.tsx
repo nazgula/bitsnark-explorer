@@ -1,8 +1,8 @@
 import React from 'react';
 import Page from '../../components/Page';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useFetchInteraction from './useFetchIneraction';
-import { Card, Container, Grid, Typography } from '@mui/material';
+import { Card, Container, Grid, Tab, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import Step from './Step';
 
 function Interaction() {
@@ -14,9 +14,10 @@ function Interaction() {
     if (error) return <div>Error fetching data</div>;
 
     const headerProps = {
-        title: 'Interaction',
+        title: 'Interaction Protocol Steps',
         subTitle: 'Just the place for a Snark!'
     };
+
 
     function renderStep0() {
         return (
@@ -30,11 +31,64 @@ function Interaction() {
         const protocol = data.protocol || [];
         return (
 
-            protocol.map((line, i) => {
-                return (
-                    <Step key={i} line={line} totalsteps={data.totalSteps} />
-                )
-            })
+            // protocol.map((line, i) => {
+            //     return (
+            //         <Step key={i} line={line} totalsteps={data.totalSteps} />
+            //     )
+            // })
+
+            <Table stickyHeader={true}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Step</TableCell>
+                        <TableCell>Prover</TableCell>
+                        <TableCell>Verifier</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {protocol.map((line: any, i: number) => {
+                        return (
+                            <TableRow key={i}>
+                                <TableCell>{line.step} / {data.totalSteps}</TableCell>
+                                <TableCell>
+                                    {line.pTxId &&
+                                        <Link to={`/tx/${line.pTxId}`}>
+                                            {line.pTxId}
+                                        </Link>
+                                    }
+                                    {!line.pTxId &&
+                                        <span className="text-red-500">
+                                            Time out: ${line.timeout}
+                                        </span>
+                                    }
+
+                                </TableCell>
+                                <TableCell >
+                                    {line.vTxId &&
+                                        <Link to={`/tx/${line.pTxId}`}>
+                                            {line.vTxId}
+                                        </Link>
+                                    }
+                                    {!line.vTxId &&
+                                        <span className="text-red-500">
+                                            Time out: ${line.timeout}
+                                        </span>
+                                    }
+
+                                    {/* <span className={!line.vTxId ? 'text-red-500' : ''}>
+                                        {line.vTxId ? line.vTxId : `Time out: ${line.timeout}`}
+                                    </span> */}
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
+                </TableBody>
+            </Table >
+            // protocol.map((line, i) => {
+            //         return (
+
+            //         )
+            //     })
         )
 
 
