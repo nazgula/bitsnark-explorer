@@ -13,7 +13,7 @@ function Header(props: HeaderProps) {
     const { title, subTitle = '', backLink, children = null } = props;
 
     return (
-        <div className="sticky flex flex-col justify-center w-full h-24 bg-white shadow-sm min-h-24 top-16">
+        <div className="flex flex-col justify-center w-full h-24 bg-white shadow-sm  min-h-24 top-16">
             <h1 className="w-full text-2xl">
                 {title}
             </h1>

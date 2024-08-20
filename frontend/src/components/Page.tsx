@@ -14,8 +14,8 @@ function Page(props: PageProps) {
 
         <div className="w-full ">
             <Navbar />
-            <Header {...headerProps}></Header>
             <div className=" flex flex-col items-center p-6 my-4 mx-auto w-[80vw] bg-white min-h-[85vh] rounded-l shadow overflow-y-scroll">
+                <Header {...headerProps}></Header>
 
 
                 <div className="flex flex-col items-center w-full ">

@@ -2,8 +2,8 @@ import React from 'react';
 import Page from '../../components/Page';
 import { Link, useParams } from 'react-router-dom';
 import useFetchInteraction from './useFetchIneraction';
-import { Card, Container, Grid, Tab, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
-import Step from './Step';
+import { Card, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+
 
 function Interaction() {
     const { id } = useParams<{ id: string }>();
@@ -27,68 +27,137 @@ function Interaction() {
             </Grid>
         )
     }
-    function renderMidSteps() {
-        const protocol = data.protocol || [];
+
+    function renderStakes(pStake: string, vStake: string) {
         return (
-
-            // protocol.map((line, i) => {
-            //     return (
-            //         <Step key={i} line={line} totalsteps={data.totalSteps} />
-            //     )
-            // })
-
             <Table stickyHeader={true}>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Step</TableCell>
-                        <TableCell>Prover</TableCell>
-                        <TableCell>Verifier</TableCell>
+                        <TableCell ></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {protocol.map((line: any, i: number) => {
-                        return (
-                            <TableRow key={i}>
-                                <TableCell>{line.step} / {data.totalSteps}</TableCell>
-                                <TableCell>
-                                    {line.pTxId &&
-                                        <Link to={`/tx/${line.pTxId}`}>
-                                            {line.pTxId}
-                                        </Link>
-                                    }
-                                    {!line.pTxId &&
-                                        <span className="text-red-500">
-                                            Time out: ${line.timeout}
-                                        </span>
-                                    }
-
-                                </TableCell>
-                                <TableCell >
-                                    {line.vTxId &&
-                                        <Link to={`/tx/${line.pTxId}`}>
-                                            {line.vTxId}
-                                        </Link>
-                                    }
-                                    {!line.vTxId &&
-                                        <span className="font-bold">
-                                            Timeout at: {line.timeout}
-                                        </span>
-                                    }
-
-                                    {/* <span className={!line.vTxId ? 'text-red-500' : ''}>
-                                        {line.vTxId ? line.vTxId : `Time out: ${line.timeout}`}
-                                    </span> */}
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
+                    <TableRow key={-2} className="font-bold">
+                        <TableCell>Stakes</TableCell>
+                        <TableCell >
+                            {pStake}
+                        </TableCell>
+                        <TableCell >
+                            {vStake}
+                        </TableCell>
+                    </TableRow>
+                    <TableRow key={-1} className="font-bold">
+                        <TableCell></TableCell>
+                        <TableCell >
+                            0.005 bitcoin
+                        </TableCell>
+                        <TableCell >
+                            0.005 bitcoin
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
-            </Table >
-            // protocol.map((line, i) => {
-            //         return (
 
-            //         )
-            //     })
+            </Table >
+        )
+    }
+    function renderMidSteps() {
+        const protocol = data.protocol || [];
+        return (
+            <>
+                {renderStakes(data.protocol[0]?.pTxId || '', data.protocol[0].vTxId || '')}
+
+
+                <Table stickyHeader={true} className="py-4">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell >Step</TableCell>
+                            <TableCell>Prover</TableCell>
+                            <TableCell>Verifier</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {protocol.map((line: any, i: number) => {
+                            return (
+                                <TableRow key={i}>
+                                    <TableCell>{line.step} / {data.totalSteps}</TableCell>
+                                    <TableCell className={i === parseInt(data.totalSteps) ? 'bg-gray-50' : ''}>
+                                        {line.pTxId &&
+                                            <Link to={`/tx/${line.pTxId}`}>
+                                                {line.pTxId}
+                                            </Link>
+                                        }
+                                        {!line.pTxId && !line.vTxId &&
+                                            <span className="text-red-500">
+                                                Time out: {line.timeout}
+                                            </span>
+                                        }
+
+                                        {!line.pTxId && line.vTxId &&
+                                            <>
+                                                {/* <span className="">
+                                                    * For the snark was a boojum, you see.
+                                                </span> */}
+
+                                                <span className="float-right text-red-500">
+                                                    Equivocation &gt;&gt;
+                                                </span>
+                                            </>
+                                        }
+
+                                    </TableCell>
+                                    <TableCell className={i === parseInt(data.totalSteps) ? 'bg-gray-50' : ''}>
+                                        {line.vTxId &&
+                                            <Link to={`/tx/${line.pTxId}`}>
+                                                {line.vTxId}
+
+                                            </Link>
+                                        }
+                                        {!line.vTxId && i !== parseInt(data.totalSteps) &&
+                                            <span className="font-bold">
+                                                Timeout at: {line.timeout}
+                                            </span>
+                                        }
+                                        {line.pTxId && !line.vTxId && i === parseInt(data.totalSteps) &&
+                                            <>
+
+
+                                                <span className="text-green-700 ">
+                                                    &lt;&lt; Proved
+                                                </span>
+                                                {/* <span className="float-right ">
+                                                    * What I tell you three times is true.
+                                                </span> */}
+                                            </>
+                                        }
+
+
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </Table >
+
+                <div className="p-4">
+
+                    {parseInt(data.totalSteps) === protocol.length - 1 &&
+                        protocol[protocol.length - 1].pTxId &&
+                        <span className="">
+                            What I tell you three times is true.
+                        </span>
+                    }
+
+                    {parseInt(data.totalSteps) === protocol.length - 1 &&
+                        protocol[protocol.length - 1].vTxId &&
+                        <span className="">
+                            For the snark was a boojum, you see.
+                        </span>
+                    }
+                </div>
+            </>
+
         )
 
 

@@ -21,16 +21,17 @@ function InteractionList() {
                 <Chip label="All" />
                 <Chip label="New" variant="outlined" />
                 <Chip label="Proved" variant="outlined" />
-                <Chip label="Timeout" variant="outlined" />
                 <Chip label="Disproved" variant="outlined" />
+                <Chip label="Timedout" variant="outlined" />
             </div>
-            <Table stickyHeader={true}>
+            <Table stickyHeader={true} className="flex px-24 py-8">
                 <TableHead>
                     <TableRow>
                         <TableCell>Initial Tx</TableCell>
                         <TableCell>Step</TableCell>
                         <TableCell>Tern</TableCell>
                         <TableCell>Timeout</TableCell>
+                        <TableCell>Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -45,6 +46,7 @@ function InteractionList() {
                                 <TableCell>{row.step} / {row.total}</TableCell>
                                 <TableCell>{row.tern}</TableCell>
                                 <TableCell>{row.timeout}</TableCell>
+                                <TableCell>{row.status}</TableCell>
                             </TableRow>
                         )
                     })}
