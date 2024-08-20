@@ -13,17 +13,26 @@ export class Interactions {
     @PrimaryColumn({ unique: true })
     interactionId!: string;
 
-    @Column({ type: 'timestamp' })
-    init_datetime!: Date;
+    @Column({ type: 'int' })
+    total_steps!: number;
+
+    @Column({ type: 'bigint' })
+    init_datetime!: bigint;
 
     @Column({ type: 'int' })
     v_stake_amount!: number;
 
+    @Column({ type: 'string' })
+    v_stake_tx!: string;
+
     @Column({ type: 'int' })
     p_stake_amount!: number;
 
-    @Column({ type: 'int' })
-    total_steps!: number;
+    @Column({ type: 'string' })
+    p_stake_tx!: string;
+
+    @Column({ type: 'bigint' })
+    next_timeout!: bigint;
 
     @Column({ default: InteractionStatus.active })
     status: InteractionStatus = InteractionStatus.active;

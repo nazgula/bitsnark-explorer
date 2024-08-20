@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, Column, OneToMany, JoinColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany, JoinColumn, ManyToOne, Timestamp } from 'typeorm';
 
 @Entity()
 export class Tx {
@@ -20,31 +20,37 @@ export class Tx {
     @Column({ type: 'int' })
     fee!: number;
 
-    @Column({ type: 'boolean' })
+    @Column({ type: 'boolean', default: false })
     confirmed!: boolean;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', default: null })
     block_height!: number;
 
-    @Column()
+    @Column({ default: null })
     block_hash!: string;
 
-    @Column({ type: 'timestamp' })
-    block_time!: Date;
+    @Column({ type: 'bigint', default: null })
+    block_time!: bigint;
+
+    @Column({ type: 'jsonb' })
+    vout!: {
+        scriptpubkey: string;
+        scriptpubkey_asm: string;
+        scriptpubkey_type: string;
+        scriptpubkey_address: string;
+        value: number;
+    }[];
+
 
     @OneToMany(() => Vin, vin => vin.tx, { cascade: true })
     @JoinColumn()
     vin!: Vin[];
-
-    @OneToMany(() => Vout, vout => vout.tx, { cascade: true })
-    @JoinColumn()
-    vout!: Vout[];
 }
 
 @Entity()
 export class Vin {
     @PrimaryColumn()
-    txid!: string;
+    vin_tx_id!: string;
 
     @Column({ type: 'int' })
     vout!: number;
@@ -52,13 +58,13 @@ export class Vin {
     @Column()
     scriptsig!: string;
 
-    @Column()
+    @Column({ default: null })
     scriptsig_asm!: string;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', default: [] })
     witness!: string[];
 
-    @Column({ type: 'boolean' })
+    @Column({ type: 'boolean', default: null })
     is_coinbase!: boolean;
 
     @Column({ type: 'bigint' })
@@ -67,7 +73,7 @@ export class Vin {
     @ManyToOne(() => Tx, tx => tx.vin)
     tx!: Tx;
 
-    @Column({ type: 'jsonb' })
+    @Column({ type: 'jsonb', default: null })
     prevout!: {
         scriptpubkey: string;
         scriptpubkey_asm: string;
@@ -75,28 +81,4 @@ export class Vin {
         scriptpubkey_address: string;
         value: number;
     };
-}
-
-@Entity()
-export class Vout {
-    @PrimaryGeneratedColumn()
-    id!: number;
-
-    @Column()
-    scriptpubkey!: string;
-
-    @Column()
-    scriptpubkey_asm!: string;
-
-    @Column()
-    scriptpubkey_type!: string;
-
-    @Column()
-    scriptpubkey_address!: string;
-
-    @Column({ type: 'int' })
-    value!: number;
-
-    @ManyToOne(() => Tx, tx => tx.vout)
-    tx!: Tx;
 }
