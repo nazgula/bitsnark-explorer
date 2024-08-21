@@ -11,7 +11,7 @@ export enum InteractionStatus {
 
 export class Interactions {
     @PrimaryColumn({ unique: true })
-    interactionId!: string;
+    interaction_id!: string;
 
     @Column({ type: 'int' })
     total_steps!: number;
@@ -19,16 +19,16 @@ export class Interactions {
     @Column({ type: 'bigint' })
     init_datetime!: bigint;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', default: null })
     v_stake_amount!: number;
 
-    @Column({ type: 'string' })
+    @Column({ type: 'varchar', default: null })
     v_stake_tx!: string;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', default: null })
     p_stake_amount!: number;
 
-    @Column({ type: 'string' })
+    @Column({ type: 'varchar' })
     p_stake_tx!: string;
 
     @Column({ type: 'bigint' })

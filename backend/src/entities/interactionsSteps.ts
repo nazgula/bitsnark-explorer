@@ -16,28 +16,22 @@ export class InteractionSteps {
     @PrimaryColumn({ type: 'int' })
     step!: number;
 
-    @Column({ unique: true })
-    p_txid!: string;
-
-    @Column({ type: 'int' })
-    p_tx_block!: playerIndentity;
-
-    @Column({ type: 'timestamp' })
-    p_tx_datetime!: Date;
+    @PrimaryColumn({ type: 'int' })
+    identity!: playerIndentity;
 
     @Column({ unique: true })
-    v_txid!: string;
+    txid!: string;
 
-    @Column({ type: 'int' })
-    v_tx_block!: playerIndentity;
+    @Column({ type: 'bigint' })
+    p_tx_datetime!: bigint;
 
-    @Column({ type: 'timestamp' })
-    v_tx_datetime!: Date;
+    @Column({ type: 'varchar' })
+    tx_block_hash!: string;
 
-    @Column({ type: 'timestamp' })
-    response_timeout!: Date;
+    @Column({ type: 'bigint' })
+    response_timeout!: bigint;
 
-    @ManyToOne(() => Interactions, interaction => interaction.interactionId)
-    @JoinColumn({ name: 'interactionId' })
+    @ManyToOne(() => Interactions, interaction => interaction.interaction_id)
+    @JoinColumn({ name: 'interaction_id' })
     interaction!: Interactions;
 }

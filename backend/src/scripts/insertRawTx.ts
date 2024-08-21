@@ -14,9 +14,9 @@ console.log('Database url:', process.env.DATABASE_URL);
 const insertData = async () => {
     const rawTxRepository = AppDataSource.getRepository(RawTx);
 
-    const txArray = ['3b1c6f9fe90bab7aced3514781a20b7366b6df11554ad9da2eaa75699c9c3c91', // prover stake
+    const txArray = [//'3b1c6f9fe90bab7aced3514781a20b7366b6df11554ad9da2eaa75699c9c3c91', // prover stake
         '1e2e0fcb27b3e89983eea4ed0cdbd06d867ac3bcfd83ae90510e2bec312ba309', // initial
-        'ab263d758510355f1828df632c17725eea453821227e785f0e414e8cb2d6fa42', // verifier stake
+        //'ab263d758510355f1828df632c17725eea453821227e785f0e414e8cb2d6fa42', // verifier stake
         '3cee52b99ef71f1b7a0c2d0f58483f338117d8c1f6232d1f43408b1860cd3bf6',
         'c860d816bb6f7a1fa90b3d8e6cf6530ab97f3d2c1eec0061407e57b7b633ec70',
         '4315696f6f5778731c02909f44fced5f0d9b7ac6a6391e7a607b021b936f81ae',
@@ -76,10 +76,10 @@ const insertData = async () => {
     }
 
     txArray.forEach(async (txId, index) => {
-        await delay(index * 3000)
+        await delay(index * 4000)
         const newTransaction = new RawTx();
 
-        newTransaction.txId = txId; //'3cee52b99ef71f1b7a0c2d0f58483f338117d8c1f6232d1f43408b1860cd3bf6';
+        newTransaction.tx_id = txId; //'3cee52b99ef71f1b7a0c2d0f58483f338117d8c1f6232d1f43408b1860cd3bf6';
 
         const response = await fetch(`https://blockstream.info/testnet/api/tx/${txId}`);
         if (!response.ok) {
@@ -87,7 +87,14 @@ const insertData = async () => {
         }
         const data = await response.json();
 
-        newTransaction.rawData = data;
+        newTransaction.block_height = data.status.block_height;
+        newTransaction.pos_in_block = index * 10;
+        if (txId === '1e2e0fcb27b3e89983eea4ed0cdbd06d867ac3bcfd83ae90510e2bec312ba309')
+            newTransaction.tx_type = 1;
+        else if (txId === '3cee52b99ef71f1b7a0c2d0f58483f338117d8c1f6232d1f43408b1860cd3bf6')
+            newTransaction.tx_type = 2;
+
+        newTransaction.raw_data = data;
         newTransaction.processed = false;
 
         await rawTxRepository.save(newTransaction);
