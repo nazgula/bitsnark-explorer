@@ -6,10 +6,11 @@ import Navbar from './Navbar';
 
 interface PageProps {
     headerProps: HeaderProps
+    className?: string;
     children: React.ReactNode;
 }
 function Page(props: PageProps) {
-    const { headerProps, children } = props;
+    const { headerProps, children, className = '' } = props;
     return (
 
         <div className="w-full ">
@@ -18,12 +19,12 @@ function Page(props: PageProps) {
                 <Header {...headerProps}></Header>
 
 
-                <div className="flex flex-col items-center w-full ">
+                <div className={`flex flex-col items-center w-full ${className}`}>
 
                     {children}
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }

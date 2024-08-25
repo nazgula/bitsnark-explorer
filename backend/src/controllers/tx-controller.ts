@@ -3,11 +3,14 @@ import { Tx, Vin } from '../entities/tx';
 import { RawTx } from '../entities/rawTx';
 import AppDataSource from '../config/database';
 
-export const getInteractions = async (req: Request, res: Response) => {
+
+export const getRawTx = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        console.log('Fetching Raw tx:', req.params);
+        const { txid } = req.params;
         const txRepository = AppDataSource.getRepository(RawTx);
-        const tx = await txRepository.find({ where: { tx_id: id } });
+        const tx = await txRepository.findOne({ where: { tx_id: txid } });
+        console.log('Raw tx:', tx);
         res.json(tx);
     } catch (error) {
         console.error('Error fetching interactions:', error);

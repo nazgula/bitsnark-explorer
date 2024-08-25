@@ -3,6 +3,7 @@ import React from 'react'
 import useFetchInteractions from './useFetchInteraction';
 import Page from '../../components/Page';
 import { Link } from 'react-router-dom';
+import { formatDate, formatHash } from '../../utils/utils';
 
 function InteractionList() {
     const { data, loading, error } = useFetchInteractions();
@@ -14,20 +15,6 @@ function InteractionList() {
         title: 'Bitsnark Explorer',
         subTitle: 'Just the place for a Snark!'
     };
-
-    //console.log('data', data);
-
-    const formatDate = (timestamp: string) => {
-        const date = new Date(Number(timestamp) * 1000);
-        return date.toLocaleString();
-    };
-
-    function formatHash(hash: string, numChars: number = 6): string {
-        const firstPart = hash.substring(0, numChars);
-        const lastPart = hash.substring(hash.length - numChars);
-        return `${firstPart}...${lastPart}`;
-    }
-
 
 
     return (

@@ -23,7 +23,7 @@ const useFetchTx = <T>(id: string) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/getTx/${id}`);
+                const response = await axiosInstance.get(`/getRawTx/${id}`);
                 if (response && response.data) {
 
                     setData(response.data);
