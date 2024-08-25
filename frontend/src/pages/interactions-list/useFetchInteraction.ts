@@ -17,7 +17,7 @@ const useFetchInteractions = <T>() => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/getIneractions`);
+                const response = await axiosInstance.get(`/getInteractions`);
                 if (response && response.data) {
                     console.log('response', response);
                     setData(response.data);

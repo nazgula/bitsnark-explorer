@@ -3,27 +3,29 @@ import axiosInstance from '../../axiosInstance';
 
 export interface ProtocolStep {
     id: string,
-    pTxId: string,
-    vTxId: string,
+    p_txid: string,
+    v_txid: string,
     step: string,
-    timeout: string
+    p_response_timeout: string,
+    v_response_timeout: string
 }
 
 export interface Interaction {
     id: string,
     tern: string,
+    total_steps: number,
     protocol: ProtocolStep[]
 }
 
 const useFetchInteraction = <T>(id: string) => {
-    const [data, setData] = useState<Interaction>({ id: '', tern: '', protocol: [] });
+    const [data, setData] = useState<Interaction>({ id: '', total_steps: 0, tern: '', protocol: [] });
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/getIneraction/${id}`);
+                const response = await axiosInstance.get(`/getInteraction/${id}`);
                 if (response && response.data) {
 
                     setData(response.data);

@@ -18,6 +18,7 @@ function Interaction() {
         subTitle: 'Just the place for a Snark!'
     };
 
+    //console.log('data', data);
 
     function renderStep0() {
         return (
@@ -66,7 +67,7 @@ function Interaction() {
         const protocol = data.protocol || [];
         return (
             <>
-                {renderStakes(data.protocol[0]?.pTxId || '', data.protocol[0].vTxId || '')}
+                {renderStakes(data.protocol[0]?.p_txid || '', data.protocol[0].v_txid || '')}
 
 
                 <Table stickyHeader={true} className="py-4">
@@ -81,20 +82,20 @@ function Interaction() {
                         {protocol.map((line: any, i: number) => {
                             return (
                                 <TableRow key={i}>
-                                    <TableCell>{line.step} / {data.totalSteps}</TableCell>
-                                    <TableCell className={i === parseInt(data.totalSteps) ? 'bg-gray-50' : ''}>
-                                        {line.pTxId &&
-                                            <Link to={`/tx/${line.pTxId}`}>
-                                                {line.pTxId}
+                                    <TableCell>{line.step} / {data.total_steps}</TableCell>
+                                    <TableCell className={i === data.total_steps ? 'bg-gray-50' : ''}>
+                                        {line.p_txid &&
+                                            <Link to={`/tx/${line.p_txid}`}>
+                                                {line.p_txid}
                                             </Link>
                                         }
-                                        {!line.pTxId && !line.vTxId &&
+                                        {!line.p_txid && !line.v_txid &&
                                             <span className="text-red-500">
                                                 Time out: {line.timeout}
                                             </span>
                                         }
 
-                                        {!line.pTxId && line.vTxId &&
+                                        {!line.p_txid && line.v_txid &&
                                             <>
                                                 {/* <span className="">
                                                     * For the snark was a boojum, you see.
@@ -107,19 +108,19 @@ function Interaction() {
                                         }
 
                                     </TableCell>
-                                    <TableCell className={i === parseInt(data.totalSteps) ? 'bg-gray-50' : ''}>
-                                        {line.vTxId &&
-                                            <Link to={`/tx/${line.pTxId}`}>
-                                                {line.vTxId}
+                                    <TableCell className={i === data.total_steps ? 'bg-gray-50' : ''}>
+                                        {line.v_txid &&
+                                            <Link to={`/tx/${line.p_txid}`}>
+                                                {line.v_txid}
 
                                             </Link>
                                         }
-                                        {!line.vTxId && i !== parseInt(data.totalSteps) &&
+                                        {!line.v_txid && i !== data.total_steps &&
                                             <span className="font-bold">
                                                 Timeout at: {line.timeout}
                                             </span>
                                         }
-                                        {line.pTxId && !line.vTxId && i === parseInt(data.totalSteps) &&
+                                        {line.p_txid && !line.v_txid && i === data.total_steps &&
                                             <>
 
 
@@ -142,15 +143,15 @@ function Interaction() {
 
                 <div className="p-4">
 
-                    {parseInt(data.totalSteps) === protocol.length - 1 &&
-                        protocol[protocol.length - 1].pTxId &&
+                    {data.total_steps === protocol.length - 1 &&
+                        protocol[protocol.length - 1].p_txid &&
                         <span className="">
                             What I tell you three times is true.
                         </span>
                     }
 
-                    {parseInt(data.totalSteps) === protocol.length - 1 &&
-                        protocol[protocol.length - 1].vTxId &&
+                    {data.total_steps === protocol.length - 1 &&
+                        protocol[protocol.length - 1].v_txid &&
                         <span className="">
                             For the snark was a boojum, you see.
                         </span>

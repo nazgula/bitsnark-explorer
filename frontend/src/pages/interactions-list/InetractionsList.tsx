@@ -15,6 +15,21 @@ function InteractionList() {
         subTitle: 'Just the place for a Snark!'
     };
 
+    //console.log('data', data);
+
+    const formatDate = (timestamp: string) => {
+        const date = new Date(Number(timestamp) * 1000);
+        return date.toLocaleString();
+    };
+
+    function formatHash(hash: string, numChars: number = 6): string {
+        const firstPart = hash.substring(0, numChars);
+        const lastPart = hash.substring(hash.length - numChars);
+        return `${firstPart}...${lastPart}`;
+    }
+
+
+
     return (
         <Page headerProps={pageProps}>
             <div className="flex gap-4 p-8">
@@ -28,24 +43,32 @@ function InteractionList() {
                 <TableHead>
                     <TableRow>
                         <TableCell>Initial Tx</TableCell>
+                        <TableCell>Created at</TableCell>
+                        <TableCell>Block</TableCell>
+                        <TableCell>Prover Stake</TableCell>
+                        <TableCell>Verifier Stake</TableCell>
                         <TableCell>Step</TableCell>
                         <TableCell>Tern</TableCell>
-                        <TableCell>Timeout</TableCell>
+                        <TableCell>Next timeout</TableCell>
                         <TableCell>Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {data.map((row: any) => {
                         return (
-                            <TableRow key={row.initTx}>
+                            <TableRow key={row.interaction_id}>
                                 <TableCell>
-                                    <Link to={`/interaction/${row.initTx}`}>
-                                        {row.initTx}
+                                    <Link to={`/interaction/${row.interaction_id}`}>
+                                        {formatHash(row.interaction_id)}
                                     </Link>
                                 </TableCell>
-                                <TableCell>{row.step} / {row.total}</TableCell>
-                                <TableCell>{row.tern}</TableCell>
-                                <TableCell>{row.timeout}</TableCell>
+                                <TableCell>{formatDate(row.init_datetime)}</TableCell>
+                                <TableCell> block</TableCell>
+                                <TableCell>{row.p_stake_amount}</TableCell>
+                                <TableCell>{row.v_stake_amount}</TableCell>
+                                <TableCell> / {row.total_steps}</TableCell>
+                                <TableCell> - </TableCell>
+                                <TableCell>{formatDate(row.next_timeout)}</TableCell>
                                 <TableCell>{row.status}</TableCell>
                             </TableRow>
                         )
