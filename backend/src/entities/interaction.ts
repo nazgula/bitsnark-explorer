@@ -9,7 +9,7 @@ export enum InteractionStatus {
 
 @Entity()
 
-export class Interactions {
+export class Interaction {
     @PrimaryColumn({ unique: true })
     interaction_id!: string;
 
@@ -33,6 +33,8 @@ export class Interactions {
 
     @Column({ type: 'bigint' })
     next_timeout!: bigint;
+
+    //Add next_turn_idenitity
 
     @Column({ default: InteractionStatus.active })
     status: InteractionStatus = InteractionStatus.active;

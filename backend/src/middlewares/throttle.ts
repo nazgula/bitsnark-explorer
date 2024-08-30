@@ -1,13 +1,22 @@
-import { Request, Response, NextFunction } from 'express';
-
 let lastRequestTime = 0;
+const THROTTLE_INTERVAL = 3000;
 
-export function throttle(req: Request, res: Response, next: NextFunction) {
+function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function canProceed(): Promise<boolean> {
     const currentTime = Date.now();
-    if (currentTime - lastRequestTime < 5000) {
-        return res.status(429).json({ error: 'Too many requests' });
+    const timeSinceLastRequest = currentTime - lastRequestTime;
+    if (timeSinceLastRequest < THROTTLE_INTERVAL) {
+        await delay(THROTTLE_INTERVAL - timeSinceLastRequest);
     }
-    lastRequestTime = currentTime;
-    console.log(lastRequestTime, `req: ${req.url}`);
-    next();
+    lastRequestTime = Date.now();
+    return true;
+}
+
+export async function throttle<T>(fn: (...args: any[]) => Promise<T>, ...args: any[]): Promise<T> {
+    await canProceed();
+    console.log(lastRequestTime, 'Throttle check passed');
+    return await fn(...args);
 }

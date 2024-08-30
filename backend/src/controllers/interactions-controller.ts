@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { Interactions } from '../entities/interactions';
+import { Interaction } from '../entities/interaction';
 import AppDataSource from '../config/database';
 
 export const getInteractions = async (req: Request, res: Response) => {
     try {
-        const interactionsRepository = AppDataSource.getRepository(Interactions);
+        const interactionsRepository = AppDataSource.getRepository(Interaction);
         const interactions = await interactionsRepository.find();
         res.json(interactions);
     } catch (error) {
@@ -25,17 +25,17 @@ export const getInteractionById = async (req: Request, res: Response) => {
                 "v"."response_timeout" as "v_response_timeout" 
             FROM 
             (SELECT "step", "txid",  "response_timeout"
-                FROM interaction_steps 
+                FROM interaction_step
                 WHERE "identity" = 1 
                 AND "interaction_id" = $1) as p
             FULL OUTER JOIN
             (SELECT "step", "txid",  "response_timeout"
-                FROM interaction_steps 
+                FROM interaction_step
                 WHERE "identity" = 2 
                 AND "interaction_id" = $1) as "v"
             ON "p"."step" = "v"."step"`;
 
-        const interactionsRepository = AppDataSource.getRepository(Interactions);
+        const interactionsRepository = AppDataSource.getRepository(Interaction);
         const interaction = await interactionsRepository.findOne({ where: { interaction_id: id } });
 
         const interactionsSteps = await AppDataSource.query(sql, [id]);

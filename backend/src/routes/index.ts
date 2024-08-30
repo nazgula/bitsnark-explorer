@@ -7,7 +7,7 @@ import { getRawTx } from '../controllers/tx-controller';
 
 const router = express.Router();
 
-router.get('/getTx/:txid', throttle, getTx);
+// router.get('/getTx/:txid', throttle, getTx);
 router.get('/getRawTx/:txid', getRawTx);
 router.get('/getInteractions', getInteractions);
 router.get('/getInteraction/:id', getInteractionById);
