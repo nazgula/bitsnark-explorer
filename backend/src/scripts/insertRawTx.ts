@@ -6,10 +6,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-console.log('Database User:', process.env.POSTGRES_USER);
-console.log('Database Password:', process.env.POSTGRES_PASSWORD);
-console.log('Database Name:', process.env.POSTGRES_DB);
-console.log('Database url:', process.env.DATABASE_URL);
+
 
 const insertData = async () => {
     const rawTxRepository = AppDataSource.getRepository(RawTx);
@@ -79,7 +76,7 @@ const insertData = async () => {
         await delay(index * 4000)
         const newTransaction = new RawTx();
 
-        newTransaction.tx_id = txId;
+        newTransaction.txid = txId;
 
         const response = await fetch(`https://blockstream.info/testnet/api/tx/${txId}`);
         if (!response.ok) {

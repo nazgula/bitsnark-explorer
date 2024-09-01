@@ -50,7 +50,7 @@ export class Tx {
 @Entity()
 export class Vin {
     @PrimaryColumn()
-    vin_tx_id!: string;
+    vin_txid!: string;
 
     @Column({ type: 'int' })
     vout!: number;

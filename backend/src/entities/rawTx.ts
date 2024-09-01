@@ -2,10 +2,10 @@ import exp from 'constants';
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 export enum TxType {
-    step = 0,
+    stake = 0,
     initial = 1,
     challenge = 2,
-    stake = 3,
+    step = 3
 }
 
 export enum Indentity {
@@ -15,13 +15,13 @@ export enum Indentity {
 
 @Entity()
 export class RawTx {
+    @PrimaryColumn({ unique: true })
+    txid!: string;
+
     @Column({ type: 'bigint' })
     block_height!: bigint;
 
-    @PrimaryColumn({ unique: true })
-    tx_id!: string;
-
-    @Column({ default: 0 })
+    @Column()
     tx_type!: number;
 
     @Column({ default: null })

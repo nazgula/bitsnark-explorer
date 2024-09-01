@@ -9,7 +9,7 @@ export const getRawTx = async (req: Request, res: Response) => {
         console.log('Fetching Raw tx:', req.params);
         const { txid } = req.params;
         const txRepository = AppDataSource.getRepository(RawTx);
-        const tx = await txRepository.findOne({ where: { tx_id: txid } });
+        const tx = await txRepository.findOne({ where: { txid: txid } });
         console.log('Raw tx:', tx);
         res.json(tx);
     } catch (error) {

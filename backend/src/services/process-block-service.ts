@@ -70,7 +70,7 @@ export class BlockProcessingService {
             if (prevTxs.length > 0) {
                 const tx = txArray[prevTxs[0].pos_in_batch_array];
 
-                const txPrev = prevTxs.filter(ptx => tx.vin.some(vin => vin.txid === ptx.tx_id));
+                const txPrev = prevTxs.filter(ptx => tx.vin.some(vin => vin.txid === ptx.txid));
                 if (txPrev.length > 0) {
                     const queryRunner = await createQueryRunner();
                     try {

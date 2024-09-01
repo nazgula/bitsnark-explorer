@@ -44,9 +44,10 @@ export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInB
     else {
         //interaction = await getInteraction(rawTx, prevTxData, queryRunner);
         interaction = new Interaction();
+        interaction.interaction_id = prevTxData.filter(tx => tx.tx_type !== TxType.stake)[0].interaction_id;
         if (rawTx.tx_type === TxType.challenge) {
             const stakeTx = prevBitsnarkTxs.filter(tx => tx.tx_type === TxType.stake)[0];
-            interaction.v_stake_tx = stakeTx.tx_id;
+            interaction.v_stake_tx = stakeTx.txid;
             interaction.v_stake_amount = getStakeAmount(stakeTx);
         }
 
@@ -61,7 +62,7 @@ export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInB
 async function updatePrevRawTxs(rawTx: RawTx, prevTxData: PrevTx[], queryRunner: QueryRunner) {
     const rawTxupdates = prevTxData.map(prevTx => {
         const updateRawTx = new RawTx();
-        updateRawTx.tx_id = prevTx.tx_id;
+        updateRawTx.txid = prevTx.txid;
         updateRawTx.has_next_tx = true;
         if (prevTx.tx_type === TxType.stake) {
             updateRawTx.tx_identity = rawTx.tx_identity;
@@ -80,7 +81,7 @@ function saveInteractionStep(interaction_id: string, currentTx: RawTx, prevTxDat
     interactionStep.interaction_id = interaction_id;
     interactionStep.step = getInteractionStep(currentTx, prevTxData);
     interactionStep.identity = currentTx.tx_identity;
-    interactionStep.txid = currentTx.tx_id;
+    interactionStep.txid = currentTx.txid;
     interactionStep.p_tx_datetime = BigInt((currentTx.raw_data as TxData).status.block_time);
     interactionStep.tx_block_hash = (currentTx.raw_data as TxData).status.block_hash;
     interactionStep.response_timeout = calculateNextTimeout(currentTx.raw_data as TxData);
@@ -89,7 +90,7 @@ function saveInteractionStep(interaction_id: string, currentTx: RawTx, prevTxDat
 
 function parseRawTX(raw: TxData, prevTxData: PrevTx[], posInBlock: number) {
     const rawTx = new RawTx();
-    rawTx.tx_id = raw.txid;
+    rawTx.txid = raw.txid;
     rawTx.block_height = BigInt(raw.status.block_height);
     rawTx.pos_in_block = posInBlock;
 
@@ -115,7 +116,7 @@ function parseNewInteraction(currentTx: TxData, initialStakeTx: RawTx) {
     interaction.interaction_id = currentTx.txid;
     interaction.total_steps = calculateTotalSteps(currentTx);
     interaction.init_datetime = BigInt(currentTx.status.block_time);
-    interaction.p_stake_tx = initialStakeTx.tx_id;
+    interaction.p_stake_tx = initialStakeTx.txid;
     interaction.p_stake_amount = getStakeAmount(initialStakeTx);
     interaction.next_timeout = calculateNextTimeout(currentTx);
     interaction.status = InteractionStatus.active;
@@ -129,7 +130,7 @@ function getInteractionStep(currentTx: RawTx, prevTxs: PrevTx[]) {
     if (currentTx.tx_identity === Indentity.prover) return prevTxs[0].step + 1;
     else if (currentTx.tx_identity === Indentity.verifier) return prevTxs[0].step
 
-    throw new Error(`Cannot define step for txid ${currentTx.tx_id}: identity ${currentTx.tx_identity} 
+    throw new Error(`Cannot define step for txid ${currentTx.txid}: identity ${currentTx.tx_identity} 
         step ${prevTxs[0].step} currentTx.tx_type ${currentTx.tx_type}`);
 }
 
@@ -146,7 +147,7 @@ async function getInteraction(raw: RawTx, prevTxData: PrevTx[], queryRunner: Que
             }
         });
     if (ineraction) return ineraction;
-    else throw new Error(`Cannot find interaction for txid ${raw.tx_id}`);
+    else throw new Error(`Cannot find interaction for txid ${raw.txid}`);
 
 }
 
@@ -192,7 +193,7 @@ function parseTX(raw: TxData) {
 function parseVin(vinData: any, tx: Tx) {
     const vin = new Vin();
     vin.tx = tx;
-    vin.vin_tx_id = vinData.txid;
+    vin.vin_txid = vinData.txid;
     vin.vout = vinData.vout;
     vin.scriptsig = vinData.scriptsig;
     vin.sequence = vinData.sequence;
