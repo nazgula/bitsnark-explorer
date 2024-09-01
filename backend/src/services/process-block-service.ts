@@ -1,4 +1,4 @@
-import AppDataSource from "../config/database";
+import AppDataSource from "../config/db-config";
 import { getBlockByHeight, getBlockTip, getBlockTxsFromPos } from "./blockstream-calls";
 import { throttle } from "../middlewares/throttle";
 import { processRawTxData } from './process-raw-tx';

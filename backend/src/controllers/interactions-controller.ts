@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Interaction } from '../entities/interaction';
-import AppDataSource from '../config/database';
+import AppDataSource from '../config/db-config';
 
 export const getInteractions = async (req: Request, res: Response) => {
     try {

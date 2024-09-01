@@ -1,4 +1,4 @@
-import AppDataSource from '../config/database';
+import AppDataSource from '../config/db-config';
 import { RawTx, TxType } from '../entities/rawTx';
 import 'reflect-metadata';
 import * as dotenv from 'dotenv';

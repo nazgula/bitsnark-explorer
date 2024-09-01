@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Tx, Vin } from '../entities/tx';
 import { RawTx } from '../entities/rawTx';
-import AppDataSource from '../config/database';
+import AppDataSource from '../config/db-config';
 
 
 export const getRawTx = async (req: Request, res: Response) => {

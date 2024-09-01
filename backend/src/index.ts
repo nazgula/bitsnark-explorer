@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors'; // Import CORS
-import AppDataSource from './config/database';
+import AppDataSource from './config/db-config';
 import routes from './routes/index';
 import { BlockProcessingService } from './services/process-block-service';
 import { BlockScheduler } from './schedulers/block-scheduler';
