@@ -15,8 +15,6 @@ export interface VOut {
     value: number
 }
 
-
-
 // const txRepository = queryRunner.manager.getRepository(Tx);
 // const tx = parseTX(raw);
 // await txRepository.save(tx);
@@ -33,7 +31,7 @@ export interface VOut {
 export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInBlock: number, queryRunner: QueryRunner) {
     const rawTx = parseRawTX(raw, prevTxData, posInBlock);
     const prevBitsnarkTxs = await updatePrevRawTxs(rawTx, prevTxData, queryRunner);
-    queryRunner.manager.save([rawTx, ...prevBitsnarkTxs])
+    await queryRunner.manager.save([rawTx, ...prevBitsnarkTxs])
 
     let interaction: Interaction;
 
@@ -42,7 +40,6 @@ export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInB
         interaction = parseNewInteraction(raw, stakeTx);
     }
     else {
-        //interaction = await getInteraction(rawTx, prevTxData, queryRunner);
         interaction = new Interaction();
         interaction.interaction_id = prevTxData.filter(tx => tx.tx_type !== TxType.stake)[0].interaction_id;
         if (rawTx.tx_type === TxType.challenge) {
@@ -50,7 +47,6 @@ export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInB
             interaction.v_stake_tx = stakeTx.txid;
             interaction.v_stake_amount = getStakeAmount(stakeTx);
         }
-
         interaction.next_timeout = calculateNextTimeout(raw);
     }
     await queryRunner.manager.save(interaction);
@@ -60,7 +56,15 @@ export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInB
 }
 
 async function updatePrevRawTxs(rawTx: RawTx, prevTxData: PrevTx[], queryRunner: QueryRunner) {
-    const rawTxupdates = prevTxData.map(prevTx => {
+
+    const rawTxupdates = await queryRunner.manager.getRepository(RawTx).find({
+        where: {
+            txid: In(prevTxData.map(prev => prev.txid))
+        }
+    });
+
+
+    prevTxData.map(prevTx => {
         const updateRawTx = new RawTx();
         updateRawTx.txid = prevTx.txid;
         updateRawTx.has_next_tx = true;
@@ -69,12 +73,9 @@ async function updatePrevRawTxs(rawTx: RawTx, prevTxData: PrevTx[], queryRunner:
         }
         return updateRawTx;
     });
-    // return prevTxs;
-    console.log('rawTxupdates', ...rawTxupdates)
+
     return rawTxupdates
-
 }
-
 
 function saveInteractionStep(interaction_id: string, currentTx: RawTx, prevTxData: PrevTx[]) {
     const interactionStep = new InteractionStep();
@@ -109,7 +110,6 @@ function parseRawTX(raw: TxData, prevTxData: PrevTx[], posInBlock: number) {
     rawTx.raw_data = raw;
     return rawTx;
 }
-
 
 function parseNewInteraction(currentTx: TxData, initialStakeTx: RawTx) {
     const interaction = new Interaction();
