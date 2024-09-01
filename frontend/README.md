@@ -1,30 +1,78 @@
-# React + TypeScript + Vite
+# Bitsnark Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is the bitsnark protocol interactions explorer.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+it consists of a backend Node.js (Express.js) + TS
+and a frontend using React + TS
+The project requires PostgreSQL running in a Docker container.
 
-## Expanding the ESLint configuration
+configuration
+vite server port: 3000
+backend port: 5000
+postgresSQL:'5432:5432'
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js and npm installed
+- Docker and Docker Compose installed
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```sh
+git clone https://github.com/nazgula/bitsnark-explorer
+cd your-repo
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### 2. Install Dependencies
+
+```sh
+cd backend
+npm install
+
+cd ../frontend
+npm install
+```
+
+### 3. Install Dependencies
+
+Set Up PostgreSQL with Docker (docker-compose.yml provided)
+
+### 4. Environment Variables
+
+in backend root:
+
+```sh
+BLOCKSTREAM_API_URL=https://blockstream.info/testnet/api #test-api
+DATABASE_URL=postgres://<<your-user>>>>:<<your-passward>>>>@localhost:5432/<<bitsnark or other name>>
+
+```
+
+### 5. Start the PostgreSQL Container
+
+Run the following command to start the PostgreSQL container:
+
+```sh
+docker-compose up -d
+```
+
+### 5.Run the Backend and Frontend
+
+Backend
+Navigate to the backend folder and start the server with nodemon:
+
+```sh
+cd backend
+npx nodemon
+```
+
+Frontend
+Navigate to the frontend folder and start the development server:
+
+```sh
+cd ../frontend
+npm start
+```
