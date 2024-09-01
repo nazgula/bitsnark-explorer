@@ -18,7 +18,6 @@ export class BlockProcessingService {
 
     async initialize() {
         const blockRow = await getLastProcessedBlockFromDB();
-        console.log(`BlockProcessingService initialize ${blockRow}`)
         if (blockRow) {
             this.block = blockRow;
         }
@@ -29,8 +28,6 @@ export class BlockProcessingService {
 
     async crawlBlocks() {
         try {
-            console.log('crawlBlocks:', this.block.height, 'processing:', this.isProcessing);
-
             if (this.isProcessing) {
                 console.log(`Already processing block ${this.block.height}`);
                 return;
@@ -51,11 +48,7 @@ export class BlockProcessingService {
         if (this.block.tx_count === this.block.tx_processed) {
             await this.fetchNextBlock();
         }
-
-        console.log('Processing block:', this.block.height);
-
         while (this.block.tx_processed < this.block.tx_count) {
-            console.log(`Processing ${this.block.height} from: ${this.block.tx_processed}`);
             const newTxs = await throttle(getBlockTxsFromPos, this.block.id, this.block.tx_processed);
             await this.processBlockTxs(newTxs);
         }
@@ -65,7 +58,6 @@ export class BlockProcessingService {
         const txArrayLength = txArray.length;
 
         while (txArray.length > 0) {
-            console.log(`array at the begining of loop: ${txArray.length} starts with txid: ${txArray[0].txid}`);
             let blockTxIds = Array.from(
                 new Set(
                     txArray.flatMap((tx, index) =>
@@ -73,19 +65,10 @@ export class BlockProcessingService {
                     )
                 ));
 
-            console.log('processBlockTxs total vin ids & pos:', blockTxIds.length);
-
             let prevTxs = await getNoNextTxsByIds(blockTxIds);
-            console.log('prevTxs.length:', prevTxs.length, prevTxs);
 
             if (prevTxs.length > 0) {
-                console.log('$$$$$ processBlockTxs existing prevTx:', prevTxs[0]);
                 const tx = txArray[prevTxs[0].pos_in_batch_array];
-
-                console.log('processBlockTxs existing prevTx:',
-                    prevTxs.length,
-                    prevTxs.filter(ptx => ptx.pos_in_batch_array === prevTxs[0].pos_in_batch_array),
-                    prevTxs.filter(ptx => ptx.pos_in_batch_array === prevTxs[0].pos_in_batch_array).length);
 
                 const txPrev = prevTxs.filter(ptx => tx.vin.some(vin => vin.txid === ptx.tx_id));
                 if (txPrev.length > 0) {
@@ -98,9 +81,7 @@ export class BlockProcessingService {
                             posInBlock,
                             queryRunner);
 
-                        //await this.updateBlockProcessedCount(this.block.id, posInBlock, queryRunner);
                         await queryRunner.commitTransaction();
-                        //this.block.tx_processed = posInBlock;
                     }
                     catch (error) {
                         this.isProcessing = false;
@@ -110,19 +91,16 @@ export class BlockProcessingService {
                         await queryRunner.release();
                     }
                 }
+
                 txArray.splice(0, prevTxs[0].pos_in_batch_array + 1);
-                console.log(`array after splice: ${txArray.length} starts with txid: ${txArray.length ? txArray[0].txid : 'empty'}`);
             }
             else {
                 txArray.splice(0, txArray.length);
             }
         }
 
-        console.log('updateBlockProcessedCount:', this.block.tx_processed, 'to', + (this.block.tx_processed + txArrayLength));
         this.block.tx_processed = this.block.tx_processed + txArrayLength;
         await this.updateBlockProcessedCount(this.block.id, this.block.tx_processed);
-
-
     }
 
     async fetchNextBlock() {
