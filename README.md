@@ -8,10 +8,11 @@ it consists of a backend Node.js (Express.js) + TS
 and a frontend using React + TS
 The project requires PostgreSQL running in a Docker container.
 
-configuration
-vite server port: 3000
-backend port: 5000
-postgresSQL:'5432:5432'
+## configuration
+
+- vite server port: 3000
+- backend port: 5000
+- postgresSQL: 5432
 
 ## Prerequisites
 
