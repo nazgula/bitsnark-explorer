@@ -46,6 +46,17 @@ export class BlockProcessingService {
 
     async processBlock() {
         if (this.block.tx_count === this.block.tx_processed) {
+            if (this.block.height >= BigInt(2869507)) {
+                console.log(`Do not process block ${this.block.height} and heigher`);
+                this.isProcessing = false;
+                return;
+                //check depth of the block
+                // const tip = await getBlockTip();
+                // if (tip.height < this.block.height + process.env.MIN_BLOCK_DEPTH) {
+                //     console.log(`Block ${this.block.height} is the latest block`);
+                //     return;
+                // }
+            }
             await this.fetchNextBlock();
         }
         while (this.block.tx_processed < this.block.tx_count) {

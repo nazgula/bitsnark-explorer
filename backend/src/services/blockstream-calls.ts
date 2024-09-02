@@ -1,31 +1,13 @@
 import axios from 'axios';
-import { Request, Response } from 'express';
 import { config } from 'dotenv';
 import { BlockData, TxData } from '../types/blockstream';
 config();
 
 
-export async function getTx(req: Request, res: Response) {
-    const { txid } = req.params;
-
-    try {
-        console.log('Fetching transaction data for:', txid);
-        const response = await fetch(`https://blockstream.info/testnet/api/tx/${txid}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error /api/tx/${txid}! status: ${response.status}`);
-        }
-        const data = await response.json();
-        res.json(data);
-
-    } catch (error) {
-        console.error('Error fetching transaction data:', error);
-        res.status(500).json({ error: 'Failed to fetch transaction data' });
-    }
-}
 
 export async function getBlockTip() {
     try {
-        const response = await axios.get(`https://blockstream.info/testnet/api/blocks/tip`);
+        const response = await axios.get(`${process.env.BLOCKSTREAM_API_URL}/blocks/tip`);
     } catch (error) {
         console.error('Error fetching block tip:', error);
         throw error;
