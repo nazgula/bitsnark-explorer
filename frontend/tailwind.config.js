@@ -8,15 +8,16 @@ export default {
     extend: {
       colors: {
         primary: {
-          light: '#3FA2F6', // Light variant of the primary color
-          DEFAULT: '#3FA2F6', // Default variant of the primary color
-          dark: '#282642', // Dark variant of the primary color
+          light: '#F7931A', // Light variant of the primary color
+          DEFAULT: '#F7931A', // Default variant of the primary color
+          dark: '#F7931A', // Dark variant of the primary color
         },
         secondary: {
           light: '#DEA01E', // Light variant of the secondary color
           DEFAULT: '#DEA01E', // Default variant of the secondary color
           dark: '#D83A56', // Dark variant of the secondary color
         },
+        black: '#14151f', // Custom black color
       },
     },
   },
