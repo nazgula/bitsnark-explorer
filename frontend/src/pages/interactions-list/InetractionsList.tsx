@@ -16,16 +16,35 @@ function InteractionList() {
         subTitle: 'Just the place for a Snark!'
     };
 
+    function renderTableRow(row: any, index: number) {
+        return (
+            <TableRow key={row.index}>
+                <TableCell>
+                    <Link to={`/interaction/${row.interaction_id}`}>
+                        {formatHash(row.interaction_id)}
+                    </Link>
+                </TableCell>
+                <TableCell>{formatDate(row.init_datetime)}</TableCell>
+                <TableCell> block</TableCell>
+                <TableCell>{row.p_stake_amount}</TableCell>
+                <TableCell>{row.v_stake_amount}</TableCell>
+                <TableCell> / {row.total_steps}</TableCell>
+                <TableCell> - </TableCell>
+                <TableCell>{formatDate(row.next_timeout)}</TableCell>
+                <TableCell>{row.status}</TableCell>
+            </TableRow>
+        )
+    }
 
     return (
         <Page headerProps={pageProps}>
-            <div className="flex gap-4 p-8">
+            {/* <div className="flex gap-4 p-8">
                 <Chip label="All" />
                 <Chip label="New" variant="outlined" />
                 <Chip label="Proved" variant="outlined" />
                 <Chip label="Disproved" variant="outlined" />
                 <Chip label="Timedout" variant="outlined" />
-            </div>
+            </div> */}
             <Table stickyHeader={true} className="flex px-24 py-8">
                 <TableHead>
                     <TableRow>
@@ -41,25 +60,11 @@ function InteractionList() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row: any) => {
-                        return (
-                            <TableRow key={row.interaction_id}>
-                                <TableCell>
-                                    <Link to={`/interaction/${row.interaction_id}`}>
-                                        {formatHash(row.interaction_id)}
-                                    </Link>
-                                </TableCell>
-                                <TableCell>{formatDate(row.init_datetime)}</TableCell>
-                                <TableCell> block</TableCell>
-                                <TableCell>{row.p_stake_amount}</TableCell>
-                                <TableCell>{row.v_stake_amount}</TableCell>
-                                <TableCell> / {row.total_steps}</TableCell>
-                                <TableCell> - </TableCell>
-                                <TableCell>{formatDate(row.next_timeout)}</TableCell>
-                                <TableCell>{row.status}</TableCell>
-                            </TableRow>
-                        )
-                    })}
+                    {
+                        Array.from({ length: 20 }).map((_, index) => (
+                            data.map((row: any) => renderTableRow(row, index))
+                        ))
+                    }
                 </TableBody>
             </Table>
         </Page>
