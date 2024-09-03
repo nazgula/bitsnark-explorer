@@ -9,7 +9,7 @@ function Navbar(props: NavbarProps) {
     const { children = null } = props;
 
     return (
-        <div className="sticky top-0 flex justify-center w-full p-4 bg-white shadow-sm">
+        <div className="sticky top-0 z-50 flex justify-center w-full p-4 bg-white shadow-sm">
             <img src={logo} className="App-logo" alt="logo" width="32" />
             {children}
         </div>
