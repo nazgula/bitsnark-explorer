@@ -25,9 +25,7 @@ function Tx() {
         const totalValue = vin.reduce((acc, curr) => {
             acc += curr.prevout.value;
             return acc;
-        }
-            , 0);
-
+        }, 0);
         return (totalValue / 100000000).toFixed(8);
     }
 
@@ -52,7 +50,7 @@ function Tx() {
                 {
                     values.map((value) => (
                         <Typography sx={{ fontSize: 16 }} component="div" gutterBottom>
-                            {value}
+                            {value} / {value.length / 2}
                         </Typography>
                     ))
                 }
@@ -66,10 +64,10 @@ function Tx() {
                 <Card className="flex flex-col w-1/2 p-2 text-left">
                     <CardContent >
                         {renderLabelAndValue('', vin.txid)}
-                        {renderLabelAndValue('Decoded', '***')}
                         {renderLabelAndValue('Previous Output Script', vin.prevout.scriptpubkey_asm)}
                         {renderLabelAndValue('Previous Output Script Type', vin.prevout.scriptpubkey_type)}
                         {renderLabelAndValue('Previous Output Script Address', vin.prevout.scriptpubkey_address)}
+                        {renderLabelAndValue('Decoded', vin.decoded)}
                         {renderLabelAndMap('Witness', vin.witness)}
                     </CardContent>
                 </Card>

@@ -39,6 +39,7 @@ export interface Vin {
     sequence: number;
     witness: string[];
     prevout: Vout;
+    decoded?: string; // Decoded witness - not from api but from the service
 }
 
 
