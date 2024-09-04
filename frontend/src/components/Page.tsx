@@ -14,8 +14,8 @@ function Page(props: PageProps) {
         <div className="w-full h-screen overflow-hidden ">
             <Header {...headerProps}></Header>
 
-            <div className={`flex flex-col items-center p-6 my-4 mx-auto w-[80vw] bg-white min-h-[60vh] rounded-l shadow `}>
-                <div className={` flex flex-col items-center w-full max-h-[60vh] overscroll-y-auto overflow-scroll ${className}`}>
+            <div className={`flex flex-col items-center p-6 my-4 mx-auto w-[80vw] bg-white min-h-[60vh] rounded-l  `}>
+                <div className={` flex flex-col items-center w-full max-h-[60vh]  ${className}`}>
                     {children}
                 </div>
             </div>

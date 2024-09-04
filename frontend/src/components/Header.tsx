@@ -15,7 +15,7 @@ function Header(props: HeaderProps) {
 
     return (
         <div className="sticky top-0 z-50 flex flex-col justify-center w-full bg-white shadow-sm border-b-[1px] min-h-24 border-primary">
-            <Navbar />
+            {/* <Navbar /> */}
             <h1 className="w-full pt-8 text-2xl">
                 {title}
             </h1>

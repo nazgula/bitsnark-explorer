@@ -37,7 +37,7 @@ function InteractionList() {
     }
 
     return (
-        <Page headerProps={pageProps} className="">
+        <Page headerProps={pageProps} className="overflow-scroll overscroll-y-auto">
             {/* <div className="flex gap-4 p-8">
                 <Chip label="All" />
                 <Chip label="New" variant="outlined" />
