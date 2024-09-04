@@ -16,8 +16,10 @@ The project requires PostgreSQL running in a Docker container.
 
 ## Prerequisites
 
-- Node.js and npm installed
-- Docker and Docker Compose installed
+- Node.js
+- npm
+- Docker
+- Docker Compose
 
 ## Setup Instructions
 
@@ -31,49 +33,38 @@ cd your-repo
 ### 2. Install Dependencies
 
 ```sh
-cd backend
-npm install
-
-cd ../frontend
 npm install
 ```
 
-### 3. Install Dependencies
+### 4. Set Environment Variables
 
-Set Up PostgreSQL with Docker (docker-compose.yml provided)
-
-### 4. Environment Variables
-
-in backend root:
+In the `backend` directory:
 
 ```sh
-BLOCKSTREAM_API_URL=https://blockstream.info/testnet/api #test-api
-DATABASE_URL=postgres://<<your-user>>>>:<<your-passward>>>>@localhost:5432/<<bitsnark or other name>>
-
+BLOCKSTREAM_API_URL=https://blockstream.info/testnet/api
+DATABASE_URL=postgres://<user>:<password>@localhost:5432/bitsnark
 ```
 
 ### 5. Start the PostgreSQL Container
 
-Run the following command to start the PostgreSQL container:
+Still in the `backend` directory:
 
 ```sh
 docker-compose up -d
 ```
 
-### 5.Run the Backend and Frontend
+### 5. Run the Backend
 
-Backend
-Navigate to the backend folder and start the server with nodemon:
+Still in the `backend` directory:
 
 ```sh
-cd backend
 npx nodemon
 ```
 
-Frontend
-Navigate to the frontend folder and start the development server:
+### 5. Run the Frontend
+
+In the `frontend` directory:
 
 ```sh
-cd ../frontend
-npm start
+npm serve
 ```
