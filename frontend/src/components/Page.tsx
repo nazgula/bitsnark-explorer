@@ -13,11 +13,12 @@ interface PageProps {
 function Page(props: PageProps) {
     const { headerProps, children, className = '' } = props;
     return (
-        <div className="w-full ">
-            <Navbar />
-            <div className=" flex flex-col items-center p-6 my-4 mx-auto w-[80vw] bg-white min-h-[85vh] rounded-l shadow overflow-y-scroll">
-                <Header {...headerProps}></Header>
-                <div className={`flex flex-col items-center w-full ${className}`}>
+        <div className="w-full h-screen">
+
+            <Header {...headerProps}></Header>
+
+            <div className=" flex flex-col items-center p-6 my-4 mx-auto w-[80vw] bg-white min-h-[85vh] rounded-l shadow overflow-hidden">
+                <div className={` flex flex-col items-center w-full ${className} overflow-hidden`}>
                     {children}
                 </div>
 
