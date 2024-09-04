@@ -18,10 +18,10 @@ function InteractionList() {
 
     function renderTableRow(row: any, index: number) {
         return (
-            <TableRow key={row.index}>
+            <TableRow key={index}>
                 <TableCell>
                     <Link to={`/interaction/${row.interaction_id}`}>
-                        {formatHash(row.interaction_id)}
+                        {index} / {formatHash(row.interaction_id)}
                     </Link>
                 </TableCell>
                 <TableCell>{formatDate(row.init_datetime)}</TableCell>
@@ -37,7 +37,7 @@ function InteractionList() {
     }
 
     return (
-        <Page headerProps={pageProps}>
+        <Page headerProps={pageProps} className="">
             {/* <div className="flex gap-4 p-8">
                 <Chip label="All" />
                 <Chip label="New" variant="outlined" />

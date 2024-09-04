@@ -173,14 +173,9 @@ function Interaction() {
 
     return (
         <Page headerProps={headerProps}>
-            <div className="flex flex-col justify-center overflow-y-scroll">
-                {/* <Grid container spacing={3} direction='column'> */}
-                {/* {renderStep0()} */}
-                {renderMidSteps()}
-                {/* {renderEquivocationZone()}
-                {renderFinalStep()} */}
-                {/* </Grid> */}
-            </div>
+
+            {renderMidSteps()}
+
         </Page>
     );
 }
