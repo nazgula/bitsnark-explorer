@@ -99,7 +99,6 @@ const insertData = async () => {
 
 
         newTransaction.raw_data = data;
-        newTransaction.processed = false;
 
         await rawTxRepository.save(newTransaction);
         console.log(`Data fo txId ${txId} inserted successfully`);

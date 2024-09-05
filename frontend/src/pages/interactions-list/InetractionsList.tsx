@@ -1,14 +1,23 @@
 import { Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React from 'react'
-import useFetchInteractions from './useFetchInteraction';
+import useFetchInteractions, { fetchInteractions } from './useFetchInteraction';
 import Page from '../../components/Page';
 import { Link } from 'react-router-dom';
 import { formatDate, formatHash } from '../../utils/utils';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function InteractionList() {
-    const { data, loading, error } = useFetchInteractions();
 
-    if (loading) return <div>Loading...</div>;
+    // Queries
+
+    //const { data, loading, error } = useFetchInteractions();
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['Interactions'],
+        queryFn: fetchInteractions,
+        refetchInterval: 60000,
+    });
+    console.log('data', data, error, isLoading);
+    if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error fetching data</div>;
 
     const pageProps = {

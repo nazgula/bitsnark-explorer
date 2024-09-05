@@ -7,15 +7,26 @@ export interface ProtocolStep {
     v_txid: string,
     step: string,
     p_response_timeout: string,
-    v_response_timeout: string
+    v_response_timeout: string,
+    p_tx_datetime: string,
+    v_tx_datetime: string
 }
 
 export interface Interaction {
-    id: string,
-    tern: string,
+    interaction_id: string,
+    init_datetime: string,
+    next_timeout: string,
+    p_stake_amount: number,
+    p_stake_tx: string,
+    v_stake_amount: number,
+    v_stake_tx: string,
+    status: string,
     total_steps: number,
     protocol: ProtocolStep[]
 }
+
+
+
 
 const useFetchInteraction = <T>(id: string) => {
     const [data, setData] = useState<Interaction>({ id: '', total_steps: 0, tern: '', protocol: [] });

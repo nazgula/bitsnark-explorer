@@ -4,11 +4,21 @@ import React from 'react'
 import axiosInstance from './axiosInstance';
 import InteractionList from './pages/interactions-list/InetractionsList'
 import AppRouter from './AppRouter'
+import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
 function App() {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState<string>('');
+  const queryClient = new QueryClient()
+
+  queryClient.setDefaultOptions({
+    queries: {
+      staleTime: 5000,
+      refetchOnWindowFocus: false
+    }
+  });
+
 
   const handleClick = async () => {
     try {
@@ -31,7 +41,9 @@ function App() {
 
   return (
     <>
-      <AppRouter />
+      <QueryClientProvider client={queryClient}>
+        <AppRouter />
+      </QueryClientProvider>
     </>
   )
 }

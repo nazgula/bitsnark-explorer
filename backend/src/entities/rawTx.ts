@@ -36,9 +36,6 @@ export class RawTx {
     @Column({ default: null })
     decodedData!: string;
 
-    @Column({ default: false })
-    processed: boolean = false;
-
     @Column({ type: 'jsonb' })
     raw_data!: object;
 }

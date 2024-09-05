@@ -22,14 +22,18 @@ export const getInteractionById = async (req: Request, res: Response) => {
                 "p"."txid" as "p_txid", 
                 "v"."txid" as "v_txid",
                 "p"."response_timeout" as "p_response_timeout", 
-                "v"."response_timeout" as "v_response_timeout" 
+                "v"."response_timeout" as "v_response_timeout",
+                "p"."tx_datetime" as "p_tx_datetime",
+                "v"."tx_datetime" as "v_tx_datetime",
+                "p"."block_height" as "p_block_height",
+                "v"."block_height" as "v_block_height" 
             FROM 
-            (SELECT "step", "txid",  "response_timeout"
+            (SELECT "step", "txid", "response_timeout", "tx_datetime", "block_height"
                 FROM interaction_step
                 WHERE "identity" = 1 
                 AND "interaction_id" = $1) as p
             FULL OUTER JOIN
-            (SELECT "step", "txid",  "response_timeout"
+            (SELECT "step", "txid", "response_timeout", "tx_datetime", "block_height"
                 FROM interaction_step
                 WHERE "identity" = 2 
                 AND "interaction_id" = $1) as "v"
