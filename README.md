@@ -38,21 +38,17 @@ cd ../frontend
 npm install
 ```
 
-### 3. Install Dependencies
+### 3. Environment Variables
 
-Set Up PostgreSQL with Docker (docker-compose.yml provided)
-
-### 4. Environment Variables
-
-in backend root:
+in backend add an .env file containing
+(Note that the blockstream URL below is of the testing API):
 
 ```sh
-BLOCKSTREAM_API_URL=https://blockstream.info/testnet/api #test-api
-DATABASE_URL=postgres://<<your-user>>>>:<<your-passward>>>>@localhost:5432/<<bitsnark or other name>>
-
+BLOCKSTREAM_API_URL=https://blockstream.info/testnet/api
+DATABASE_URL=postgres://your-user:your-passward@localhost:5432/bitsnark
+POSTGRES_PASSWORD=your-passward
 ```
-
-### 5. Start the PostgreSQL Container
+### 4. Start the PostgreSQL Container
 
 Run the following command to start the PostgreSQL container:
 
@@ -60,9 +56,7 @@ Run the following command to start the PostgreSQL container:
 docker-compose up -d
 ```
 
-### 5.Run the Backend and Frontend
-
-Backend
+### 5.Run the backend server
 Navigate to the backend folder and start the server with nodemon:
 
 ```sh
@@ -70,10 +64,11 @@ cd backend
 npx nodemon
 ```
 
-Frontend
+### 6.Run the backend 
+
 Navigate to the frontend folder and start the development server:
 
 ```sh
 cd ../frontend
-npm start
+npm run dev
 ```
