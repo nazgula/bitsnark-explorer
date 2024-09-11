@@ -1,11 +1,17 @@
 import { Interaction, InteractionStatus } from '../entities/interaction';
 import { InteractionStep } from '../entities/interactionStep';
-import { Indentity, RawTx, TxType } from '../entities/rawTx';
-import { Tx, Vin } from '../entities/tx';
+import { RawTx, TxType } from '../entities/rawTx';
 import 'reflect-metadata';
 import { In, QueryRunner, Repository } from 'typeorm';
 import { TxData } from '../types/blockstream';
 import { PrevTx } from '../database/block-process-db';
+import { Identity } from 'bitsnark';
+
+
+export interface prevTxs {
+    stake: prevTxs[],
+    prevStep: prevTxs[]
+}
 
 export interface VOut {
     scriptpubkey: string,
@@ -15,20 +21,8 @@ export interface VOut {
     value: number
 }
 
-// const txRepository = queryRunner.manager.getRepository(Tx);
-// const tx = parseTX(raw);
-// await txRepository.save(tx);
-
-
-// const vinRepository = queryRunner.manager.getRepository(Vin);
-// const vins: Vin[] = [];
-// raw.vin.forEach((vinData) => {
-//     const vin = parseVin(vinData, tx);
-//     vins.push(vin);
-// });
-// await vinRepository.save(vins);
-
 export async function processRawTxData(raw: TxData, prevTxData: PrevTx[], posInBlock: number, queryRunner: QueryRunner) {
+
     const rawTx = parseRawTX(raw, prevTxData, posInBlock);
     const prevBitsnarkTxs = await updatePrevRawTxs(rawTx, prevTxData, queryRunner);
     await queryRunner.manager.save([rawTx, ...prevBitsnarkTxs])
@@ -80,10 +74,11 @@ async function updatePrevRawTxs(rawTx: RawTx, prevTxData: PrevTx[], queryRunner:
 function saveInteractionStep(interaction_id: string, currentTx: RawTx, prevTxData: PrevTx[]) {
     const interactionStep = new InteractionStep();
     interactionStep.interaction_id = interaction_id;
+    interactionStep.block_height = BigInt((currentTx.raw_data as TxData).status.block_height);
     interactionStep.step = getInteractionStep(currentTx, prevTxData);
     interactionStep.identity = currentTx.tx_identity;
     interactionStep.txid = currentTx.txid;
-    interactionStep.p_tx_datetime = BigInt((currentTx.raw_data as TxData).status.block_time);
+    interactionStep.tx_datetime = BigInt((currentTx.raw_data as TxData).status.block_time);
     interactionStep.tx_block_hash = (currentTx.raw_data as TxData).status.block_hash;
     interactionStep.response_timeout = calculateNextTimeout(currentTx.raw_data as TxData);
     return interactionStep;
@@ -97,14 +92,14 @@ function parseRawTX(raw: TxData, prevTxData: PrevTx[], posInBlock: number) {
 
     if (prevTxData.some(prev => prev.tx_type === TxType.initial)) {
         rawTx.tx_type = TxType.challenge;
-        rawTx.tx_identity = Indentity.verifier;
+        rawTx.tx_identity = Identity.verifier;
     } else if (prevTxData.some(prev => prev.tx_type === TxType.stake)) {
         rawTx.tx_type = TxType.initial;
-        rawTx.tx_identity = Indentity.prover;
+        rawTx.tx_identity = Identity.prover;
     }
     else {
         rawTx.tx_type = TxType.step;
-        rawTx.tx_identity = (prevTxData[0].tx_identity % 2) + 1 as Indentity;
+        rawTx.tx_identity = (prevTxData[0].tx_identity % 2) + 1 as Identity;
     }
 
     rawTx.raw_data = raw;
@@ -127,8 +122,8 @@ function getInteractionStep(currentTx: RawTx, prevTxs: PrevTx[]) {
     if (currentTx.tx_type === TxType.initial || currentTx.tx_type === TxType.challenge) {
         return 0;
     }
-    if (currentTx.tx_identity === Indentity.prover) return prevTxs[0].step + 1;
-    else if (currentTx.tx_identity === Indentity.verifier) return prevTxs[0].step
+    if (currentTx.tx_identity === Identity.prover) return prevTxs[0].step + 1;
+    else if (currentTx.tx_identity === Identity.verifier) return prevTxs[0].step
 
     throw new Error(`Cannot define step for txid ${currentTx.txid}: identity ${currentTx.tx_identity} 
         step ${prevTxs[0].step} currentTx.tx_type ${currentTx.tx_type}`);
@@ -167,47 +162,3 @@ function calculateTotalSteps(raw: any) {
     return 26;
 }
 
-function parseTX(raw: TxData) {
-    const tx = new Tx();
-
-    tx.txid = raw.txid
-    tx.version = raw.version;
-    tx.locktime = raw.locktime;
-    tx.size = raw.size;
-    tx.weight = raw.weight;
-    tx.fee = raw.fee;
-    tx.confirmed = raw.status.confirmed;
-    tx.block_height = raw.status.block_height;
-    tx.block_hash = raw.status.block_hash;
-    tx.block_time = BigInt(raw.status.block_time);
-    tx.vout = raw.vout;
-    //@ts-ignore
-    // tx.vout = raw.vout.map((vout) => {
-    //     return parsevOut(vout);
-    // });
-
-    return tx;
-}
-
-
-function parseVin(vinData: any, tx: Tx) {
-    const vin = new Vin();
-    vin.tx = tx;
-    vin.vin_txid = vinData.txid;
-    vin.vout = vinData.vout;
-    vin.scriptsig = vinData.scriptsig;
-    vin.sequence = vinData.sequence;
-    vin.witness = vinData.witness;
-    vin.prevout = vinData.prevout;
-    return vin;
-}
-
-// function parsevOut(vOutObj: VOut) {
-//     return {
-//         scriptpubkey: vOutObj.scriptpubkey,
-//         scriptpubkey_asm: vOutObj.scriptpubkey_asm,
-//         scriptpubkey_type: vOutObj.scriptpubkey_type,
-//         scriptpubkey_address: vOutObj.scriptpubkey_address,
-//         value: vOutObj.value
-//     }
-// }

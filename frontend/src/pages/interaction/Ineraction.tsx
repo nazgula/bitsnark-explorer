@@ -176,13 +176,7 @@ function Interaction() {
                     }
                 </div>
             </>
-
-        )
-
-
-
-
-
+        );
     }
 
     return (

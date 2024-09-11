@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Interaction } from './interaction';
 import { Tx } from './tx';
-import { Indentity } from './rawTx';
+import { Identity } from 'bitsnark';
 
 
 
@@ -15,7 +15,7 @@ export class InteractionStep {
     step!: number;
 
     @PrimaryColumn({ type: 'int' }) // move to rawTx
-    identity!: Indentity;
+    identity!: Identity;
 
     @Column({ unique: true })
     txid!: string;

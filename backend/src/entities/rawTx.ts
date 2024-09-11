@@ -1,5 +1,5 @@
-import exp from 'constants';
 import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Identity } from 'bitsnark';
 
 export enum TxType {
     stake = 0,
@@ -8,10 +8,6 @@ export enum TxType {
     step = 3
 }
 
-export enum Indentity {
-    prover = 1,
-    verifier = 2,
-}
 
 @Entity()
 export class RawTx {
@@ -25,7 +21,7 @@ export class RawTx {
     tx_type!: number;
 
     @Column({ default: null })
-    tx_identity!: Indentity;
+    tx_identity!: Identity;
 
     @Column({ type: 'int' })
     pos_in_block!: number;

@@ -1,13 +1,14 @@
 import AppDataSource from '../config/db-config';
 import { Block } from '../entities/block';
-import { Indentity, RawTx, TxType } from '../entities/rawTx';
+import { RawTx, TxType } from '../entities/rawTx';
 import { BlockData, TxData } from '../types/blockstream';
 import { QueryRunner } from 'typeorm';
+import { Identity } from 'bitsnark';
 
 export interface PrevTx {
     txid: string,
     tx_type: TxType,
-    tx_identity: Indentity,
+    tx_identity: Identity,
     interaction_id: string,
     step: number,
     pos_in_batch_array: number
@@ -58,7 +59,7 @@ export async function getNoNextTxsByIds(prevIdAndPos: { prev_txid: string, pos: 
             FROM interaction_step
             ORDER BY "interaction_id", "step" DESC, "identity" DESC) as "ineraction_steps"
         ON "no_next_txid" = "interaction_txid"
-        ORDER BY "pos_in_batch_array"`, [Array.from(new Set(prevIdAndPos.map(prev => prev.prev_txid)))]);
+        ORDER BY "pos_in_batch_array", tx_type`, [Array.from(new Set(prevIdAndPos.map(prev => prev.prev_txid)))]);
     return result;
 }
 

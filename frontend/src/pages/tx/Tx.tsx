@@ -91,7 +91,7 @@ function Tx() {
     }
 
     return (
-        <Page headerProps={headerProps} className="gap-8">
+        <Page headerProps={headerProps} className="overscroll-y-contain overflow-scroll max-h-[36vh] gap-8">
             <div className="p-8 text-md">
                 {id}
             </div>
@@ -115,7 +115,7 @@ function Tx() {
                 </Card>
             </div>
 
-            <div className="flex flex-row justify-center w-full gap-16" >
+            <div className="flex flex-row justify-center w-full gap-16 " >
                 {data.raw_data.vin && renderVin(data.raw_data.vin)}
                 {data.raw_data.vout && renderVout(data.raw_data.vout)}
             </div>
